@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Product = require("./models/products");
@@ -7,7 +8,8 @@ const User = require("./models/users");
 const Purchase = require("./models/purchase");
 const request = require("request");
 const bodyParser = require("body-parser");
-const URL = "http://localhost:3001";
+require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
+const URL = process.env.URL;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -136,7 +138,7 @@ app.put("/users/:id", async (req, res) => {
 //-------------------------------------------- PURCHASE --------------------------------------------------
 
 app.post("/purchase", async (req, res) => {
-  console.log("FROM /purchase - API");
+  console.log("FROM /purchase - API POST");
   const details = req.body;
 
   let data_user;
