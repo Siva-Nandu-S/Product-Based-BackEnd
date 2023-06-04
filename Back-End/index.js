@@ -107,7 +107,7 @@ app.get("/users/:id", async (req, res) => {
 app.post("/users", async (req, res) => {
   console.log("From API - /users");
   if (req.body.password.length < 8 || req.body.password.al) {
-    return res.status(400).json({ message: "Password too short" });
+    return res.json({ result: "Password" });
   }
   var user = new User(req.body);
   await user
@@ -117,7 +117,7 @@ app.post("/users", async (req, res) => {
     })
     .catch((err) => {
       console.log("Error : " + err.message);
-      res.status(400).send("unable to save, maybe use different username");
+      res.json({result: "username"});
     });
 });
 
