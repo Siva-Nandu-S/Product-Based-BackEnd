@@ -6,6 +6,7 @@ const cors = require("cors");
 const Product = require("./models/products");
 const User = require("./models/users");
 const Purchase = require("./models/purchase");
+const Cart = require("./models/cart");
 const request = require("request");
 const bodyParser = require("body-parser");
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
@@ -117,7 +118,7 @@ app.post("/users", async (req, res) => {
     })
     .catch((err) => {
       console.log("Error : " + err.message);
-      res.json({result: "username"});
+      res.json({ result: "username" });
     });
 });
 
@@ -224,6 +225,39 @@ app.put("/purchase", async (req, res) => {
     }
   );
 });
+
+//---------------------------------------------------------------CART-----------------------------------------------
+
+app.post("/cart", async (req, res) => {
+  var cart = new Cart(req.body);
+  await cart
+    .save()
+    .then((item) => {
+      res.json({ result: "success" });
+    })
+    .catch((err) => {
+      console.log("Error : " + err.message);
+      res.status(400).send("unable to save");
+    });
+});
+
+app.get("/cart/:id", async (req, res) => {
+  const username = req.params.id;
+  const cart = await Cart.find({ username: username });
+  res.json(cart);
+});
+
+app.put("/cart", async (req, res) => {
+  var cart = (req.body);
+  let deletion = await Cart.deleteOne(
+    { username: cart.username, product_id: cart.itemId}
+  );
+  res.json({
+    deletion : "success"
+  })
+});
+
+
 
 app.listen(process.env.PORT || 3001, () => {
   console.log("Listening on port 3001");
